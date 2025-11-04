@@ -16,6 +16,7 @@
 /**
  * ID del formulario de eventos de España
  * Solo este formulario será procesado por este script.
+ * IMPORTANTE: Este script DEBE estar instalado directamente en el formulario de eventos de España.
  */
 const FORMULARIO_ESPAÑA_ID = '1FAIpQLSe_dZQb2ILKkSGm5uMEhLgH0REJ13czP9NuGr48MsmOGpwJVw';
 
@@ -24,37 +25,9 @@ const FORMULARIO_ESPAÑA_ID = '1FAIpQLSe_dZQb2ILKkSGm5uMEhLgH0REJ13czP9NuGr48Msm
  */
 function onFormSubmit(e) {
   try {
-    // Obtener el ID del formulario que está enviando la respuesta
-    let formId = '';
-    try {
-      formId = e.source.getId();
-    } catch (err) {
-      try {
-        const form = FormApp.getActiveForm();
-        formId = form.getId();
-      } catch (err2) {
-        try {
-          const formResponse = e.response;
-          const formUrl = formResponse.getEditResponseUrl();
-          const match = formUrl.match(/\/d\/e\/([^\/]+)/);
-          if (match) {
-            formId = match[1];
-          }
-        } catch (err3) {
-          Logger.log('⚠️ No se pudo obtener el ID del formulario.');
-        }
-      }
-    }
-    
-    // VERIFICAR: Solo procesar si es el formulario de eventos de España
-    if (formId !== FORMULARIO_ESPAÑA_ID) {
-      Logger.log(`⚠️ Este script está configurado solo para el formulario de eventos de España.`);
-      Logger.log(`📋 Formulario detectado: ${formId || 'No identificado'}`);
-      Logger.log(`🚫 No se procesará este formulario. El otro formulario mantendrá su funcionamiento original.`);
-      return; // Salir sin hacer nada
-    }
-    
-    Logger.log(`✅ Formulario de eventos de España detectado. Procesando...`);
+    // IMPORTANTE: Si este script está instalado en el formulario de eventos de España,
+    // siempre procesará las respuestas de ese formulario. No necesitamos validar el ID.
+    Logger.log(`✅ Procesando respuesta del formulario de eventos de España...`);
     
     const formResponse = e.response;
     const itemResponses = formResponse.getItemResponses();
