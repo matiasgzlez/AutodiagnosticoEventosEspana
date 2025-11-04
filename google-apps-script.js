@@ -2,21 +2,60 @@
  * Script de Google Apps Script para enviar automáticamente
  * el informe del autodiagnóstico VUCA por email al usuario
  * 
+ * ⚠️ IMPORTANTE: Este script está configurado SOLO para el formulario de eventos de España.
+ * Si este script se instala en otro formulario, NO se procesará y no afectará su funcionamiento.
+ * 
  * INSTRUCCIONES DE INSTALACIÓN:
- * 1. Ve a tu Google Form: https://docs.google.com/forms/d/e/1FAIpQLSdu3AS1cjd3IJgf0dFz6smG83NoDtyGlXMWZJMG6dE88o-GWg/edit
+ * 1. Ve a tu Google Form de eventos de España: https://docs.google.com/forms/d/e/1FAIpQLSe_dZQb2ILKkSGm5uMEhLgH0REJ13czP9NuGr48MsmOGpwJVw/edit
  * 2. Haz clic en el menú de tres puntos (⋮) → "Scripts del editor de formularios"
  * 3. Pega este código completo en el editor de scripts
- * 4. Guarda el proyecto con un nombre (ej: "Envío de informes VUCA")
+ * 4. Guarda el proyecto con un nombre (ej: "Envío de informes VUCA - Eventos España")
  * 5. Configura el trigger como se explica al final de este archivo
  */
+
+/**
+ * ID del formulario de eventos de España
+ * Solo este formulario será procesado por este script.
+ */
+const FORMULARIO_ESPAÑA_ID = '1FAIpQLSe_dZQb2ILKkSGm5uMEhLgH0REJ13czP9NuGr48MsmOGpwJVw';
 
 /**
  * Función que se ejecuta automáticamente cuando se envía una nueva respuesta al formulario
  */
 function onFormSubmit(e) {
   try {
-    // Obtener los valores del formulario
-    // IMPORTANTE: El orden de los campos debe coincidir con el orden en el formulario
+    // Obtener el ID del formulario que está enviando la respuesta
+    let formId = '';
+    try {
+      formId = e.source.getId();
+    } catch (err) {
+      try {
+        const form = FormApp.getActiveForm();
+        formId = form.getId();
+      } catch (err2) {
+        try {
+          const formResponse = e.response;
+          const formUrl = formResponse.getEditResponseUrl();
+          const match = formUrl.match(/\/d\/e\/([^\/]+)/);
+          if (match) {
+            formId = match[1];
+          }
+        } catch (err3) {
+          Logger.log('⚠️ No se pudo obtener el ID del formulario.');
+        }
+      }
+    }
+    
+    // VERIFICAR: Solo procesar si es el formulario de eventos de España
+    if (formId !== FORMULARIO_ESPAÑA_ID) {
+      Logger.log(`⚠️ Este script está configurado solo para el formulario de eventos de España.`);
+      Logger.log(`📋 Formulario detectado: ${formId || 'No identificado'}`);
+      Logger.log(`🚫 No se procesará este formulario. El otro formulario mantendrá su funcionamiento original.`);
+      return; // Salir sin hacer nada
+    }
+    
+    Logger.log(`✅ Formulario de eventos de España detectado. Procesando...`);
+    
     const formResponse = e.response;
     const itemResponses = formResponse.getItemResponses();
     
@@ -74,8 +113,8 @@ function onFormSubmit(e) {
       nombre = 'Estimado/a profesional';
     }
     
-    // Generar el contenido del email HTML
-    const emailBody = generarCuerpoEmailHTML(nombre, empresa, cargo, pais, correo, whatsapp, puntajeTotal, nivel, recomendaciones, fechaCompletado);
+    // Generar el contenido del email HTML con el contenido del BRUNCH-SHOP
+    const emailBody = generarCuerpoEmailHTML(nombre, empresa, cargo, pais, correo, whatsapp, puntajeTotal, nivel, recomendaciones, fechaCompletado, 'brunch-shop');
     
     // Configurar el asunto del email
     const subject = `Reporte de Auto-diagnóstico VUCA - ${nombre}`;
@@ -88,7 +127,7 @@ function onFormSubmit(e) {
       name: 'K2 Solutions - Auto-diagnóstico VUCA'
     });
     
-    Logger.log(`✅ Email enviado exitosamente a: ${correo}`);
+    Logger.log(`✅ Email enviado exitosamente a: ${correo} (Evento: BRUNCH-SHOP - España)`);
     
   } catch (error) {
     Logger.log(`❌ Error al procesar el formulario: ${error.toString()}`);
@@ -98,8 +137,9 @@ function onFormSubmit(e) {
 
 /**
  * Genera el contenido HTML del email con el informe completo
+ * @param {string} tipoEvento - Tipo de evento ('brunch-shop', 'otro-evento', etc.)
  */
-function generarCuerpoEmailHTML(nombre, empresa, cargo, pais, correo, whatsapp, puntajeTotal, nivel, recomendaciones, fechaCompletado) {
+function generarCuerpoEmailHTML(nombre, empresa, cargo, pais, correo, whatsapp, puntajeTotal, nivel, recomendaciones, fechaCompletado, tipoEvento = 'brunch-shop') {
   // Determinar el color según el nivel
   let nivelColor = '#dc2626'; // Rojo por defecto (Necesita transformación)
   let nivelBg = '#fee2e2';
@@ -268,46 +308,7 @@ function generarCuerpoEmailHTML(nombre, empresa, cargo, pais, correo, whatsapp, 
             </td>
           </tr>
           
-          <!-- CTA Formación -->
-          <tr>
-            <td style="padding: 0 30px 30px 30px;">
-              <div style="background: linear-gradient(135deg, #ea580c 0%, #f97316 100%); border-radius: 12px; padding: 30px; text-align: center;">
-                <h3 style="margin: 0 0 15px 0; color: #ffffff; font-size: 24px; font-weight: bold;">
-                  Formación Recomendada
-                </h3>
-                <p style="margin: 0 0 25px 0; color: #ffffff; font-size: 16px; line-height: 1.6; opacity: 0.95;">
-                  Basado en tu evaluación VUCA, te recomendamos nuestros programas de formación especializados en cadena de suministro para fortalecer las áreas identificadas.
-                </p>
-                <a href="https://docs.google.com/forms/d/e/1FAIpQLScacDKewj6V2BtCZP6uDkI7-xiMUyJlkR4jZW5Lwi6Ett_1uA/viewform" 
-                   style="display: inline-block; background-color: #ffffff; color: #ea580c; text-decoration: none; font-weight: bold; padding: 15px 40px; border-radius: 8px; font-size: 16px; transition: all 0.3s;">
-                  Ver Programas de Formación 2025
-                </a>
-              </div>
-            </td>
-          </tr>
-          
-          <!-- Información de contacto K2 -->
-          <tr>
-            <td style="padding: 0 30px 30px 30px;">
-              <div style="background-color: #f9fafb; border: 1px solid #e5e7eb; border-radius: 8px; padding: 25px;">
-                <h3 style="margin: 0 0 20px 0; color: #111827; font-size: 20px; font-weight: 600; text-align: center;">
-                  Contáctanos
-                </h3>
-                <table role="presentation" style="width: 100%; border-collapse: collapse;">
-                  <tr>
-                    <td style="padding: 10px 0; text-align: center;">
-                      <a href="https://k2sol.co" style="color: #ea580c; text-decoration: none; font-weight: 600;">🌐 Sitio web: k2sol.co</a>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td style="padding: 10px 0; text-align: center;">
-                      <a href="mailto:info@k2sol.co" style="color: #ea580c; text-decoration: none; font-weight: 600;">✉️ Correo: info@k2sol.co</a>
-                    </td>
-                  </tr>
-                </table>
-              </div>
-            </td>
-          </tr>
+          ${generarSeccionEvento(tipoEvento)}
           
           <!-- Footer -->
           <tr>
@@ -330,6 +331,33 @@ function generarCuerpoEmailHTML(nombre, empresa, cargo, pais, correo, whatsapp, 
 </body>
 </html>
   `;
+}
+
+/**
+ * Genera la sección del email para el evento BRUNCH-SHOP de España
+ */
+function generarSeccionEvento(tipoEvento) {
+  // Este script solo genera contenido para el BRUNCH-SHOP
+  return `
+          <!-- Invitación Brunch-Shop -->
+          <tr>
+            <td style="padding: 0 30px 30px 30px;">
+              <div style="background: linear-gradient(135deg, #ea580c 0%, #f97316 100%); border-radius: 12px; padding: 30px; text-align: center; border: 4px solid #fb923c;">
+                <h3 style="margin: 0 0 20px 0; color: #ffffff; font-size: 28px; font-weight: bold; text-transform: uppercase;">
+                  TE INVITAMOS A UN "BRUNCH-SHOP" SIN COSTO
+                </h3>
+                <p style="margin: 0 0 25px 0; color: #ffffff; font-size: 16px; line-height: 1.8; opacity: 0.95;">
+                  Basado en las recomendaciones de tu auto-diagnóstico, te invitamos a aplicar a un exclusivo workshop dónde podrás ver como aplicar estos novedosos y poderosos conceptos y su impacto potencial usando un poderoso simulador, y compartir con otros ejecutivos en medio de un delicioso brunch. Aplica y te diremos si fuiste seleccionado para uno de los 20 exclusivos cupos sin costo del evento:
+                </p>
+                <a href="https://eventos.k2sol.co/evento2" 
+                   target="_blank"
+                   style="display: inline-block; background-color: #ffffff; color: #ea580c; text-decoration: none; font-weight: bold; padding: 15px 40px; border-radius: 8px; font-size: 18px; transition: all 0.3s; border: 2px solid #ffffff;">
+                  QUIERO ASISTIR
+                </a>
+              </div>
+            </td>
+          </tr>
+    `;
 }
 
 /**

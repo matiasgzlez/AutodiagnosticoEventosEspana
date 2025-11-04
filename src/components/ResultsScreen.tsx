@@ -3,7 +3,6 @@ import { motion } from 'framer-motion';
 import { TestResult } from '../types';
 import Gauge from './Gauge';
 import { submitToGoogleForms } from '../services/googleForms';
-import { K2_CONTACT } from '../config/k2Contact';
 
 interface ResultsScreenProps {
   result: TestResult;
@@ -128,7 +127,7 @@ const ResultsScreen: React.FC<ResultsScreenProps> = ({ result, onReset }) => {
           </motion.div>
         </div>
 
-        {/* Formación Recomendada - Destacada */}
+        {/* Invitación Brunch-Shop */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -143,102 +142,21 @@ const ResultsScreen: React.FC<ResultsScreenProps> = ({ result, onReset }) => {
             </div>
             
             <h2 className="text-4xl md:text-5xl font-bold mb-6 drop-shadow-lg">
-              Formación Recomendada
+              TE INVITAMOS A UN "BRUNCH-SHOP" SIN COSTO
             </h2>
             
             <p className="text-xl md:text-2xl mb-8 opacity-95 leading-relaxed font-light">
-              Basado en tu evaluación VUCA, te recomendamos nuestros programas de formación especializados 
-              en cadena de suministro para fortalecer las áreas identificadas.
+              Basado en las recomendaciones de tu auto-diagnóstico, te invitamos a aplicar a un exclusivo workshop dónde podrás ver como aplicar estos novedosos y poderosos conceptos y su impacto potencial usando un poderoso simulador, y compartir con otros ejecutivos en medio de un delicioso brunch. Aplica y te diremos si fuiste seleccionado para uno de los 20 exclusivos cupos sin costo del evento:
             </p>
             
             <motion.button
               whileHover={{ scale: 1.08, boxShadow: "0 20px 40px rgba(0,0,0,0.3)" }}
               whileTap={{ scale: 0.95 }}
-              onClick={() => window.open(K2_CONTACT.trainingProgramsUrl, '_blank')}
+              onClick={() => window.open('https://eventos.k2sol.co/evento2', '_blank')}
               className="bg-white text-orange-600 font-bold text-lg px-12 py-5 rounded-2xl hover:bg-gray-50 transition-all duration-300 transform shadow-2xl border-2 border-white"
             >
-              Ver Programas de Formación 2025
+              QUIERO ASISTIR
             </motion.button>
-            
-            <p className="text-base mt-6 opacity-90 font-medium">
-              Programas certificados en Supply Chain Management, Compras, Logística y más
-            </p>
-          </div>
-        </motion.div>
-
-        {/* Información de contacto K2 */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.7 }}
-          className="bg-white rounded-2xl shadow-lg border border-gray-100 p-8"
-        >
-          <h3 className="text-2xl font-semibold text-text mb-6 text-center">Contáctanos</h3>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div className="flex items-start space-x-4">
-              <div className="w-10 h-10 bg-orange-100 rounded-full flex items-center justify-center flex-shrink-0">
-                <svg className="w-5 h-5 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9" />
-                </svg>
-              </div>
-              <div>
-                <h4 className="font-semibold text-gray-900 mb-1">Sitio web</h4>
-                <a href={K2_CONTACT.website} target="_blank" rel="noopener noreferrer" className="text-orange-600 hover:underline">
-                  {K2_CONTACT.website}
-                </a>
-              </div>
-            </div>
-            <div className="flex items-start space-x-4">
-              <div className="w-10 h-10 bg-orange-100 rounded-full flex items-center justify-center flex-shrink-0">
-                <svg className="w-5 h-5 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-                </svg>
-              </div>
-              <div>
-                <h4 className="font-semibold text-gray-900 mb-1">Correo electrónico</h4>
-                <a href={`mailto:${K2_CONTACT.email}`} className="text-orange-600 hover:underline">
-                  {K2_CONTACT.email}
-                </a>
-              </div>
-            </div>
-            {K2_CONTACT.whatsapp && (
-              <div className="flex items-start space-x-4">
-                <div className="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0">
-                  <svg className="w-5 h-5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
-                  </svg>
-                </div>
-                <div>
-                  <h4 className="font-semibold text-gray-900 mb-1">WhatsApp</h4>
-                  <a 
-                    href={`https://wa.me/${K2_CONTACT.whatsapp.replace(/[^0-9]/g, '')}`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-green-600 hover:underline"
-                  >
-                    {K2_CONTACT.whatsapp}
-                  </a>
-                </div>
-              </div>
-            )}
-            <div className="flex items-start space-x-4">
-              <div className="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center flex-shrink-0">
-                <svg className="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
-                </svg>
-              </div>
-              <div>
-                <h4 className="font-semibold text-gray-900 mb-1">Programas de formación</h4>
-                <a 
-                  href={K2_CONTACT.trainingProgramsUrl}
-                  target="_blank" 
-                  rel="noopener noreferrer"
-                  className="text-orange-600 hover:underline"
-                >
-                  Ver Programas de Formación 2025
-                </a>
-              </div>
-            </div>
           </div>
         </motion.div>
 
