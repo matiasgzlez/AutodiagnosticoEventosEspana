@@ -1,21 +1,21 @@
 import { UserData, TestResult } from '../types';
 import { K2_CONTACT } from '../config/k2Contact';
 
-// URL del formulario de Google Forms
-const GOOGLE_FORMS_URL = 'https://docs.google.com/forms/d/e/1FAIpQLSdu3AS1cjd3IJgf0dFz6smG83NoDtyGlXMWZJMG6dE88o-GWg/formResponse';
+// URL del formulario de Google Forms - Eventos de España
+const GOOGLE_FORMS_URL = 'https://docs.google.com/forms/d/e/1FAIpQLSe_dZQb2ILKkSGm5uMEhLgH0REJ13czP9NuGr48MsmOGpwJVw/formResponse';
 
-// IDs de los campos del formulario
+// IDs de los campos del formulario - Eventos de España
 const FORM_FIELD_IDS = {
-  nombre: 'entry.421620701',           // Campo 1: Nombre completo
-  empresa: 'entry.440648688',          // Campo 2: Empresa
-  cargo: 'entry.376414939',            // Campo 3: Cargo
-  pais: 'entry.865462329',             // Campo 4: País
-  correo: 'entry.1764670428',          // Campo 5: Correo electrónico
-  whatsapp: 'entry.1845723712',        // Campo 6: WhatsApp
-  puntajeTotal: 'entry.923143848',     // Campo 7: Puntaje Total
-  nivel: 'entry.384679892',            // Campo 8: Nivel
-  recomendaciones: 'entry.1236599801', // Campo 9: Recomendaciones
-  fechaCompletado: 'entry.1614030703'  // Campo 10: Fecha completado
+  nombre: 'entry.1869948763',          // Campo 1: Nombre completo
+  empresa: 'entry.243723742',          // Campo 2: Empresa
+  cargo: 'entry.308039755',            // Campo 3: Cargo
+  pais: 'entry.1159225563',            // Campo 4: País
+  correo: 'entry.214233231',           // Campo 5: Correo electrónico
+  whatsapp: 'entry.1204742418',        // Campo 6: WhatsApp
+  puntajeTotal: 'entry.784532772',     // Campo 7: Puntaje Total
+  nivel: 'entry.28107409',             // Campo 8: Nivel
+  recomendaciones: 'entry.846616740',  // Campo 9: Recomendaciones
+  fechaCompletado: 'entry.1577985268'  // Campo 10: Fecha completado
 };
 
 /**
